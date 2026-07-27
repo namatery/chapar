@@ -61,6 +61,8 @@ kbd {
 .text-blocker { color: var(--blocker); }
 .text-combo { color: var(--combo); }
 
+.app-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+
 .tab-list {
   display: flex;
   gap: 3px;
@@ -281,6 +283,9 @@ kbd {
 
 @media (max-width: 560px) {
   .app-shell { padding: 16px 10px 48px; }
+  .app-header { align-items: stretch; flex-direction: column; gap: 12px; }
+  .app-header .tab-list { width: 100%; }
+  .app-header .tab-trigger { flex: 1; }
   .status-bar, .combo-bar { align-items: flex-start; flex-direction: column; }
   .status-bar > :last-child, .combo-bar > :last-child { width: 100%; justify-content: space-between; }
   .task-main { gap: 8px; padding-left: 12px; }

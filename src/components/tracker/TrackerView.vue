@@ -6,7 +6,6 @@ import { formatDuration } from '../../utils/time'
 import CaptureBar from './CaptureBar.vue'
 import ComboBar from './ComboBar.vue'
 import ComboLog from './ComboLog.vue'
-import EventLog from './EventLog.vue'
 import FloatingWidget from './FloatingWidget.vue'
 import TaskList from './TaskList.vue'
 
@@ -60,6 +59,5 @@ function pause() {
 
     <TaskList />
     <ComboLog />
-    <EventLog />
   </main>
 </template>

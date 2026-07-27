@@ -39,7 +39,7 @@ Use text search for literal UI copy, configuration, Markdown, CSS, and cases the
 - `src/utils/time.ts`: duration calculations, formatting, and identifiers.
 - `src/components/tracker/`: capture, tasks, combos, blockers, and floating controls.
 - `src/components/dashboard/`: charts and activity heatmap.
-- `src/components/AppTabs.vue`: top-level Tracker/Dashboard tabs.
+- `src/components/AppTabs.vue`: top-level Tracker, Events, and Dashboard tabs.
 - `src/style.css`: the complete control-room visual system.
 - `src/stores/tracker.spec.ts`: timer and persistence invariant tests.
 
