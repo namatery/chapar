@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TooltipContent, TooltipPortal, TooltipRoot, TooltipTrigger } from 'reka-ui'
 import { useToast } from '../../composables/useToast'
 import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
@@ -27,7 +28,14 @@ function stop() {
     </div>
     <div class="flex items-center gap-3">
       <span class="timer text-combo">{{ formatDuration(store.comboElapsed) }}</span>
-      <button class="button button--combo" type="button" @click="stop">{{ t('combo.stop') }}</button>
+      <TooltipRoot>
+        <TooltipTrigger as-child>
+          <button class="button button--combo button--icon" type="button" :aria-label="t('combo.stop')" @click="stop">
+            <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h10v10H7z" /></svg>
+          </button>
+        </TooltipTrigger>
+        <TooltipPortal><TooltipContent class="tooltip">{{ t('combo.stop') }}</TooltipContent></TooltipPortal>
+      </TooltipRoot>
     </div>
   </div>
 </template>
