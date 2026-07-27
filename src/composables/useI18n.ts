@@ -8,7 +8,6 @@ const STORAGE_KEY = 'chapar:locale'
 const en = {
   'meta.title': 'Chapar — task & time tracker',
   'app.name': 'CHAPAR',
-  'app.subtitle': 'Personal operations log',
   'app.view': 'Application view',
   'language.switchTo': 'Switch to Persian',
   'language.button': 'فارسی',
@@ -94,7 +93,6 @@ type MessageKey = keyof typeof en
 const fa: Record<MessageKey, string> = {
   'meta.title': 'چاپار — مدیریت کار و زمان',
   'app.name': 'چاپار',
-  'app.subtitle': 'گزارش شخصی فعالیت‌ها',
   'app.view': 'نمای برنامه',
   'language.switchTo': 'تغییر زبان به انگلیسی',
   'language.button': 'English',

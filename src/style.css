@@ -77,7 +77,33 @@ kbd {
 .text-blocker { color: var(--blocker); }
 .text-combo { color: var(--combo); }
 
-.app-header { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.app-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.brand-name {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  letter-spacing: .13em;
+}
+html[lang="fa"] .brand-name {
+  font-size: 16px;
+  letter-spacing: 0;
+}
+.brand-mark {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  overflow: hidden;
+}
+.brand-mark img {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 44px;
+  max-width: none;
+  transform: translate(-50%, -50%);
+}
 .header-actions { display: flex; align-items: center; gap: 8px; }
 .language-switch {
   display: inline-flex;

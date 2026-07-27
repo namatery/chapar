@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { TabsContent, TabsList, TabsRoot, TabsTrigger } from 'reka-ui'
+import chaparIcon from '../../icon.png'
 import Dashboard from './dashboard/Dashboard.vue'
 import EventLog from './tracker/EventLog.vue'
 import TrackerView from './tracker/TrackerView.vue'
@@ -12,8 +13,10 @@ const { direction, t, toggleLocale } = useI18n()
   <TabsRoot default-value="tracker" class="mx-auto block w-full max-w-3xl" :dir="direction">
     <header class="app-header mb-5 px-1">
       <div>
-        <div class="eyebrow"><span class="status-dot status-dot--live" /> {{ t('app.name') }}</div>
-        <p class="mt-1 text-xs text-slate-500">{{ t('app.subtitle') }}</p>
+        <div class="eyebrow brand-name">
+          <span class="brand-mark" aria-hidden="true"><img :src="chaparIcon" alt="" /></span>
+          {{ t('app.name') }}
+        </div>
       </div>
 
       <div class="header-actions">

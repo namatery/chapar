@@ -25,6 +25,7 @@ describe('AppTabs direction', () => {
     await nextTick()
 
     expect(wrapper.get('.tabs-root').attributes('dir')).toBe('rtl')
+    expect(wrapper.get('.brand-mark img').attributes('src')).toContain('icon.png')
     wrapper.unmount()
   })
 })
