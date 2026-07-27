@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { TooltipContent, TooltipPortal, TooltipRoot, TooltipTrigger } from 'reka-ui'
 import { watchEffect } from 'vue'
 import { useToast } from '../../composables/useToast'
 import { useI18n } from '../../composables/useI18n'
@@ -99,8 +100,12 @@ async function openWidget() {
 </script>
 
 <template>
-  <button class="button button--ghost" type="button" @click="openWidget">
-    <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5m0-5-7 7M5 8v11h11v-5" /></svg>
-    {{ t('actions.float') }}
-  </button>
+  <TooltipRoot>
+    <TooltipTrigger as-child>
+      <button class="button button--ghost button--icon" type="button" :aria-label="t('actions.float')" @click="openWidget">
+        <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5m0-5-7 7M5 8v11h11v-5" /></svg>
+      </button>
+    </TooltipTrigger>
+    <TooltipPortal><TooltipContent class="tooltip">{{ t('actions.float') }}</TooltipContent></TooltipPortal>
+  </TooltipRoot>
 </template>

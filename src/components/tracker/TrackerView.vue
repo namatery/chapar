@@ -48,9 +48,8 @@ function pause() {
         </span>
         <TooltipRoot>
           <TooltipTrigger as-child>
-            <button class="button button--ghost" type="button" :disabled="!store.activeTask" @click="pause">
+            <button class="button button--ghost button--icon" type="button" :aria-label="t('actions.pause')" :disabled="!store.activeTask" @click="pause">
               <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14m8-14v14" /></svg>
-              {{ t('actions.pause') }}
             </button>
           </TooltipTrigger>
           <TooltipPortal><TooltipContent class="tooltip">{{ t('actions.pauseHint') }}</TooltipContent></TooltipPortal>

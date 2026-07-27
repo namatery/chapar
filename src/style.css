@@ -326,6 +326,7 @@ html[lang="fa"] :is(.settings-menu__label, .settings-menu__item, .view-select-it
 .button--combo:hover:not(:disabled) { background: rgba(155,123,255,.19); }
 .button--danger { border-color: rgba(255,95,126,.25); background: rgba(255,95,126,.12); color: #ff9daf; }
 .button--danger:hover { background: rgba(255,95,126,.2); }
+.button--icon { width: 32px; padding: 6px; }
 .button-icon { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1.8; }
 .icon-button {
   display: grid;
