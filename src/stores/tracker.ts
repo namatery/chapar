@@ -173,7 +173,7 @@ export const useTrackerStore = defineStore('tracker', () => {
   }
 
   const timePerDay = computed(() => buildDailySeries(14))
-  const activityDays = computed(() => buildDailySeries(84))
+  const activityDays = computed(() => buildDailySeries(364))
 
   const blockersPerWeek = computed<CountDatum[]>(() => {
     const currentWeek = startOfISOWeek(new Date(now.value))

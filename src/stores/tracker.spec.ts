@@ -66,6 +66,12 @@ describe('useTrackerStore', () => {
     expect(store.tasks.map((task) => task.name)).toEqual(['Test UI'])
   })
 
+  it('builds a full 52-week activity history', () => {
+    const store = useTrackerStore()
+
+    expect(store.activityDays).toHaveLength(364)
+  })
+
   it('tags blockers with an active task or running combo snapshot', () => {
     const store = useTrackerStore()
     const start = Date.now()

@@ -387,8 +387,8 @@ html[lang="fa"] :is(.settings-menu__label, .settings-menu__item, .view-select-it
 
 .chart-frame { position: relative; min-height: 190px; }
 .chart-empty { display: grid; height: 190px; place-items: center; border: 1px dashed rgba(148,163,184,.12); border-radius: 8px; color: #475569; font-size: 12px; }
-.heatmap-grid { display: grid; width: max-content; grid-auto-flow: column; grid-template-rows: repeat(7, 12px); gap: 4px; }
-.heatmap-cell, .heatmap-key { width: 12px; height: 12px; border: 1px solid rgba(148,163,184,.06); border-radius: 3px; background: #111925; }
+.heatmap-grid { display: grid; width: max-content; grid-auto-flow: column; grid-template-rows: repeat(7, 10px); gap: 3px; }
+.heatmap-cell, .heatmap-key { width: 10px; height: 10px; border: 1px solid rgba(148,163,184,.06); border-radius: 2px; background: #111925; }
 .heatmap-key { display: inline-block; width: 10px; height: 10px; }
 .heatmap-cell--1 { border-color: rgba(53,230,164,.09); background: rgba(53,230,164,.18); }
 .heatmap-cell--2 { border-color: rgba(53,230,164,.15); background: rgba(53,230,164,.36); }
