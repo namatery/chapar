@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { format } from 'date-fns'
 import { useToast } from '../../composables/useToast'
+import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
 
 const store = useTrackerStore()
 const { showToast } = useToast()
+const { formatDate, t } = useI18n()
 
 function remove(eventId: string) {
   store.deleteEvent(eventId)
-  showToast('Blocker removed', 'neutral')
+  showToast(t('toast.blockerRemoved'), 'neutral')
 }
 </script>
 
@@ -16,8 +17,8 @@ function remove(eventId: string) {
   <section class="panel overflow-hidden">
     <div class="section-header">
       <div>
-        <div class="eyebrow text-blocker">EVENTS & BLOCKERS</div>
-        <p class="mt-1 text-xs text-slate-500">Operational friction, captured in the moment.</p>
+        <div class="eyebrow text-blocker">{{ t('events.heading') }}</div>
+        <p class="mt-1 text-xs text-slate-500">{{ t('events.subtitle') }}</p>
       </div>
     </div>
 
@@ -28,14 +29,14 @@ function remove(eventId: string) {
           <article v-for="event in month.events" :key="event.id" class="event-row">
             <span class="status-dot status-dot--blocker mt-1.5 shrink-0" />
             <div class="min-w-0 flex-1">
-              <p class="text-sm leading-6 text-slate-300">{{ event.text }}</p>
+              <p class="text-sm leading-6 text-slate-300" dir="auto">{{ event.text }}</p>
               <p class="mt-1 text-[11px] text-slate-600">
-                {{ format(new Date(event.timestamp), 'MMM d · HH:mm') }}
-                <template v-if="event.taskName"> · <span class="text-slate-500">{{ event.taskName }}</span></template>
-                <template v-else> · untagged</template>
+                {{ formatDate(event.timestamp, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}
+                <template v-if="event.taskName"> · <span class="text-slate-500" dir="auto">{{ event.taskName }}</span></template>
+                <template v-else> · {{ t('events.untagged') }}</template>
               </p>
             </div>
-            <button class="icon-button danger-hover" type="button" aria-label="Delete blocker" @click="remove(event.id)">
+            <button class="icon-button danger-hover" type="button" :aria-label="t('events.deleteAria')" @click="remove(event.id)">
               <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3m-8 0 1 13h8l1-13M10 11v5m4-5v5" /></svg>
             </button>
           </article>
@@ -44,8 +45,8 @@ function remove(eventId: string) {
     </template>
     <div v-else class="empty-state">
       <div class="empty-state__mark text-blocker">!</div>
-      <p>No events or blockers logged yet.</p>
-      <p class="text-[11px] text-slate-600">Use <kbd>Shift</kbd> + <kbd>Enter</kbd> in Tracker to add one.</p>
+      <p>{{ t('events.empty') }}</p>
+      <p class="text-[11px] text-slate-600" v-html="t('events.emptyHint')" />
     </div>
   </section>
 </template>

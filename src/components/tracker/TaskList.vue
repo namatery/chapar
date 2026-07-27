@@ -3,6 +3,7 @@ import { onKeyStroke, useToggle } from '@vueuse/core'
 import { TooltipContent, TooltipPortal, TooltipRoot, TooltipTrigger } from 'reka-ui'
 import { ref } from 'vue'
 import { useToast } from '../../composables/useToast'
+import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
 import { isTypingTarget } from '../../utils/dom'
 import { formatDuration } from '../../utils/time'
@@ -10,6 +11,7 @@ import TaskDeleteDialog from './TaskDeleteDialog.vue'
 
 const store = useTrackerStore()
 const { showToast } = useToast()
+const { formatDate, formatNumber, t } = useI18n()
 const [selectMode, toggleSelectMode] = useToggle(false)
 const selectedIds = ref<string[]>([])
 
@@ -21,14 +23,14 @@ function handleTask(taskId: string) {
     return
   }
   store.switchTask(taskId)
-  showToast('Switched task', 'live')
+  showToast(t('toast.taskSwitched'), 'live')
 }
 
 function startCombo() {
   if (!store.startCombo(selectedIds.value)) return
   selectedIds.value = []
   toggleSelectMode(false)
-  showToast('Combo started', 'combo')
+  showToast(t('toast.comboStarted'), 'combo')
 }
 
 function cancelCombine() {
@@ -39,7 +41,7 @@ function cancelCombine() {
 function deleteTask(taskId: string) {
   store.deleteTask(taskId)
   selectedIds.value = selectedIds.value.filter((id) => id !== taskId)
-  showToast('Task deleted', 'neutral')
+  showToast(t('toast.taskDeleted'), 'neutral')
 }
 
 onKeyStroke(['Tab', '1', '2', '3'], (event) => {
@@ -66,12 +68,12 @@ onKeyStroke(['Tab', '1', '2', '3'], (event) => {
   <section class="panel overflow-hidden">
     <div class="section-header">
       <div>
-        <div class="eyebrow">TASK QUEUE</div>
-        <p class="mt-1 text-xs text-slate-500">{{ store.tasks.length }} active records</p>
+        <div class="eyebrow">{{ t('tasks.heading') }}</div>
+        <p class="mt-1 text-xs text-slate-500">{{ t('tasks.records', { count: formatNumber(store.tasks.length) }) }}</p>
       </div>
       <div class="flex gap-2">
         <button v-if="selectMode" class="button button--ghost" type="button" @click="cancelCombine">
-          Cancel
+          {{ t('tasks.cancel') }}
         </button>
         <TooltipRoot>
           <TooltipTrigger as-child>
@@ -81,10 +83,10 @@ onKeyStroke(['Tab', '1', '2', '3'], (event) => {
               type="button"
               @click="toggleSelectMode()"
             >
-              {{ selectMode ? 'Selecting' : 'Combine' }}
+              {{ selectMode ? t('tasks.selecting') : t('tasks.combine') }}
             </button>
           </TooltipTrigger>
-          <TooltipPortal><TooltipContent class="tooltip">Track two or more tasks together</TooltipContent></TooltipPortal>
+          <TooltipPortal><TooltipContent class="tooltip">{{ t('tasks.combineHint') }}</TooltipContent></TooltipPortal>
         </TooltipRoot>
       </div>
     </div>
@@ -106,17 +108,17 @@ onKeyStroke(['Tab', '1', '2', '3'], (event) => {
           <span v-else class="live-slot">
             <span v-if="store.activeId === task.id" class="status-dot status-dot--live status-dot--pulse" />
           </span>
-          <span class="min-w-0 flex-1 text-left">
-            <span class="block truncate text-sm font-medium text-slate-200">{{ task.name }}</span>
+          <span class="min-w-0 flex-1 text-start">
+            <span class="block truncate text-sm font-medium text-slate-200" dir="auto">{{ task.name }}</span>
             <span class="mt-1 block font-mono text-[11px] tracking-wide text-slate-600">
-              CREATED {{ new Date(task.createdAt).toLocaleDateString() }}
+              {{ t('tasks.created', { date: formatDate(task.createdAt, { year: 'numeric', month: 'numeric', day: 'numeric' }) }) }}
             </span>
           </span>
           <TooltipRoot v-if="store.recentIds.indexOf(task.id) < 3">
             <TooltipTrigger as-child>
               <span class="shortcut-badge">{{ store.recentIds.indexOf(task.id) + 1 }}</span>
             </TooltipTrigger>
-            <TooltipPortal><TooltipContent class="tooltip">Press {{ store.recentIds.indexOf(task.id) + 1 }} to switch</TooltipContent></TooltipPortal>
+            <TooltipPortal><TooltipContent class="tooltip">{{ t('tasks.switchHint', { number: formatNumber(store.recentIds.indexOf(task.id) + 1) }) }}</TooltipContent></TooltipPortal>
           </TooltipRoot>
           <span class="timer" :class="store.activeId === task.id ? 'text-live' : 'text-slate-300'">
             {{ formatDuration(store.displaySecondsByTask[task.id] ?? 0) }}
@@ -128,18 +130,18 @@ onKeyStroke(['Tab', '1', '2', '3'], (event) => {
 
     <div v-else class="empty-state">
       <div class="empty-state__mark">+</div>
-      <p>No tasks yet. Type above and press Enter.</p>
+      <p>{{ t('tasks.empty') }}</p>
     </div>
 
     <div v-if="selectMode" class="combine-footer">
-      <span class="text-xs text-slate-400">{{ selectedIds.length }} selected · minimum 2</span>
+      <span class="text-xs text-slate-400">{{ t('tasks.selected', { count: formatNumber(selectedIds.length) }) }}</span>
       <button
         class="button button--combo"
         type="button"
         :disabled="selectedIds.length < 2"
         @click="startCombo"
       >
-        Start combo
+        {{ t('tasks.startCombo') }}
       </button>
     </div>
   </section>

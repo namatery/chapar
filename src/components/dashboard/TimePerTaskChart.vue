@@ -3,34 +3,36 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { computed } from 'vue'
 import { Bar } from 'vue-chartjs'
 import { useTrackerStore } from '../../stores/tracker'
-import { gridColor, tickColor } from './chartSetup'
+import { useI18n } from '../../composables/useI18n'
+import { chartFontFamily, gridColor, tickColor } from './chartSetup'
 
 const store = useTrackerStore()
+const { locale, t } = useI18n()
 const data = computed<ChartData<'bar'>>(() => ({
   labels: store.timePerTask.map((item) => item.label),
   datasets: [{
-    label: 'Hours',
+    label: t('dashboard.hours'),
     data: store.timePerTask.map((item) => Number((item.seconds / 3600).toFixed(2))),
     backgroundColor: '#35e6a4',
     borderRadius: 5,
     barThickness: 14,
   }],
 }))
-const options: ChartOptions<'bar'> = {
+const options = computed<ChartOptions<'bar'>>(() => ({
   responsive: true,
   maintainAspectRatio: false,
   indexAxis: 'y',
   plugins: { legend: { display: false } },
   scales: {
-    x: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
-    y: { grid: { display: false }, ticks: { color: '#94a3b8' } },
+    x: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { family: chartFontFamily(locale.value) } } },
+    y: { grid: { display: false }, ticks: { color: '#94a3b8', font: { family: chartFontFamily(locale.value) } } },
   },
-}
+}))
 </script>
 
 <template>
   <div class="chart-frame" :style="{ height: `${Math.max(190, store.timePerTask.length * 38)}px` }">
     <Bar v-if="store.timePerTask.length" :data="data" :options="options" />
-    <div v-else class="chart-empty">Tracked task time will appear here.</div>
+    <div v-else class="chart-empty">{{ t('dashboard.emptyTaskTime') }}</div>
   </div>
 </template>

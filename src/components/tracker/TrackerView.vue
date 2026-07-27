@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { TooltipContent, TooltipPortal, TooltipRoot, TooltipTrigger } from 'reka-ui'
 import { useToast } from '../../composables/useToast'
+import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
 import { formatDuration } from '../../utils/time'
 import CaptureBar from './CaptureBar.vue'
@@ -11,12 +12,13 @@ import TaskList from './TaskList.vue'
 
 const store = useTrackerStore()
 const { showToast } = useToast()
+const { t } = useI18n()
 
 function pause() {
   if (!store.activeId && !store.combo) return
   const wasCombo = Boolean(store.combo)
   store.pause()
-  showToast(wasCombo ? 'Combo split and saved' : 'Timer paused', wasCombo ? 'combo' : 'neutral')
+  showToast(wasCombo ? t('toast.comboSaved') : t('toast.timerPaused'), wasCombo ? 'combo' : 'neutral')
 }
 </script>
 
@@ -33,10 +35,10 @@ function pause() {
         <span class="status-dot shrink-0" :class="store.activeTask ? 'status-dot--live status-dot--pulse' : 'status-dot--idle'" />
         <div class="min-w-0">
           <div class="eyebrow" :class="store.activeTask ? 'text-live' : ''">
-            {{ store.activeTask ? 'ON AIR' : 'SYSTEM IDLE' }}
+            {{ store.activeTask ? t('status.onAir') : t('status.idle') }}
           </div>
           <p class="mt-1 truncate text-sm text-slate-300">
-            {{ store.activeTask?.name ?? 'Start a task to begin tracking' }}
+            <span dir="auto">{{ store.activeTask?.name ?? t('status.startPrompt') }}</span>
           </p>
         </div>
       </div>
@@ -48,10 +50,10 @@ function pause() {
           <TooltipTrigger as-child>
             <button class="button button--ghost" type="button" :disabled="!store.activeTask" @click="pause">
               <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14m8-14v14" /></svg>
-              Pause
+              {{ t('actions.pause') }}
             </button>
           </TooltipTrigger>
-          <TooltipPortal><TooltipContent class="tooltip">Bank elapsed time and pause</TooltipContent></TooltipPortal>
+          <TooltipPortal><TooltipContent class="tooltip">{{ t('actions.pauseHint') }}</TooltipContent></TooltipPortal>
         </TooltipRoot>
         <FloatingWidget />
       </div>

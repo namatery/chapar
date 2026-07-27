@@ -18,6 +18,7 @@ import type {
   Task,
   TimeDatum,
 } from '../types/tracker'
+import { useI18n } from '../composables/useI18n'
 import { elapsedSeconds, id } from '../utils/time'
 
 const STORAGE_KEY = 'chapar:tracker:v1'
@@ -82,6 +83,7 @@ function evenSplit(totalSeconds: number, taskIds: string[]): Record<string, numb
 }
 
 export const useTrackerStore = defineStore('tracker', () => {
+  const { formatDate } = useI18n()
   const persisted = useLocalStorage<AppState>(STORAGE_KEY, defaultState(), {
     mergeDefaults: true,
   })
@@ -165,7 +167,7 @@ export const useTrackerStore = defineStore('tracker', () => {
 
     return [...totals].map(([date, seconds]) => ({
       date,
-      label: format(new Date(`${date}T12:00:00`), 'MMM d'),
+      label: formatDate(new Date(`${date}T12:00:00`), { month: 'short', day: 'numeric' }),
       seconds,
     }))
   }
@@ -187,7 +189,7 @@ export const useTrackerStore = defineStore('tracker', () => {
 
     return [...counts].map(([date, count]) => ({
       date,
-      label: format(new Date(`${date}T12:00:00`), 'MMM d'),
+      label: formatDate(new Date(`${date}T12:00:00`), { month: 'short', day: 'numeric' }),
       count,
     }))
   })
@@ -200,7 +202,7 @@ export const useTrackerStore = defineStore('tracker', () => {
       const key = format(date, 'yyyy-MM')
       const group = groups.get(key) ?? {
         key,
-        label: format(date, 'MMMM yyyy'),
+        label: formatDate(date, { month: 'long', year: 'numeric' }),
         events: [],
       }
       group.events.push(event)

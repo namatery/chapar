@@ -1,11 +1,12 @@
 <script setup lang="ts">
-import { format } from 'date-fns'
 import { useToast } from '../../composables/useToast'
+import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
 import { formatDuration, minutesInputValue } from '../../utils/time'
 
 const store = useTrackerStore()
 const { showToast } = useToast()
+const { formatDate, t } = useI18n()
 
 function taskExists(taskId: string): boolean {
   return store.tasks.some((task) => task.id === taskId)
@@ -16,7 +17,7 @@ function updateSplit(entryId: string, taskId: string, event: Event) {
   const minutes = Number(input.value)
   if (!Number.isFinite(minutes)) return
   if (store.editComboSplit(entryId, taskId, minutes * 60)) {
-    showToast('Combo split updated', 'combo')
+    showToast(t('toast.comboUpdated'), 'combo')
   }
 }
 </script>
@@ -25,26 +26,26 @@ function updateSplit(entryId: string, taskId: string, event: Event) {
   <section v-if="store.comboLog.length" class="panel overflow-hidden">
     <div class="section-header">
       <div>
-        <div class="eyebrow text-combo">COMBO SESSIONS</div>
-        <p class="mt-1 text-xs text-slate-500">Edit minutes; the final row balances automatically.</p>
+        <div class="eyebrow text-combo">{{ t('combo.sessions') }}</div>
+        <p class="mt-1 text-xs text-slate-500">{{ t('combo.editHint') }}</p>
       </div>
     </div>
 
     <div class="divide-y divide-white/5">
       <details v-for="entry in store.comboLog" :key="entry.id" class="combo-entry">
         <summary>
-          <span class="min-w-0 flex-1 truncate text-sm text-slate-300">
+          <span class="min-w-0 flex-1 truncate text-sm text-slate-300" dir="auto">
             {{ entry.taskIds.map((taskId) => entry.names[taskId]).join(' + ') }}
           </span>
-          <span class="font-mono text-xs text-slate-500">{{ format(new Date(entry.createdAt), 'MMM d · HH:mm') }}</span>
+          <span class="font-mono text-xs text-slate-500">{{ formatDate(entry.createdAt, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) }}</span>
           <span class="timer text-combo">{{ formatDuration(entry.totalSeconds) }}</span>
           <span class="summary-caret">⌄</span>
         </summary>
         <div class="combo-splits">
           <div v-for="(taskId, index) in entry.taskIds" :key="taskId" class="split-row">
             <div class="min-w-0">
-              <p class="truncate text-sm text-slate-300">{{ entry.names[taskId] }}</p>
-              <p v-if="!taskExists(taskId)" class="mt-0.5 text-[11px] text-slate-600">(deleted task)</p>
+              <p class="truncate text-sm text-slate-300" dir="auto">{{ entry.names[taskId] }}</p>
+              <p v-if="!taskExists(taskId)" class="mt-0.5 text-[11px] text-slate-600">{{ t('combo.deletedTask') }}</p>
             </div>
             <label class="minute-field">
               <input
@@ -54,10 +55,10 @@ function updateSplit(entryId: string, taskId: string, event: Event) {
                 :value="minutesInputValue(entry.splitSeconds[taskId] ?? 0)"
                 :readonly="index === entry.taskIds.length - 1"
                 :disabled="!taskExists(taskId)"
-                :aria-label="`Minutes allocated to ${entry.names[taskId]}`"
+                :aria-label="t('combo.minutesAria', { name: entry.names[taskId] ?? '' })"
                 @input="updateSplit(entry.id, taskId, $event)"
               />
-              <span>min</span>
+              <span>{{ t('combo.minutesShort') }}</span>
             </label>
           </div>
         </div>

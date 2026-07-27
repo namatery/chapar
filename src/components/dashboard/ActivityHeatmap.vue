@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useTrackerStore } from '../../stores/tracker'
+import { useI18n } from '../../composables/useI18n'
 import { formatDuration } from '../../utils/time'
 
 const store = useTrackerStore()
+const { t } = useI18n()
 const maxSeconds = computed(() => Math.max(1, ...store.activityDays.map((day) => day.seconds)))
 
 function intensity(seconds: number): number {
@@ -14,7 +16,7 @@ function intensity(seconds: number): number {
 
 <template>
   <div class="overflow-x-auto pb-2">
-    <div class="heatmap-grid" aria-label="Daily tracked-time heatmap">
+    <div class="heatmap-grid" :aria-label="t('dashboard.heatmapAria')">
       <div
         v-for="day in store.activityDays"
         :key="day.date"
@@ -24,9 +26,9 @@ function intensity(seconds: number): number {
       />
     </div>
     <div class="mt-3 flex items-center justify-end gap-1 text-[10px] text-slate-600">
-      Less
+      {{ t('dashboard.less') }}
       <span v-for="level in 5" :key="level" class="heatmap-key" :class="`heatmap-cell--${level - 1}`" />
-      More
+      {{ t('dashboard.more') }}
     </div>
   </div>
 </template>

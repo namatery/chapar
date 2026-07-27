@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { watchEffect } from 'vue'
 import { useToast } from '../../composables/useToast'
+import { useI18n } from '../../composables/useI18n'
 import { useTrackerStore } from '../../stores/tracker'
 import { formatDuration } from '../../utils/time'
 
 const store = useTrackerStore()
 const { showToast } = useToast()
+const { direction, locale, t } = useI18n()
 let floatingWindow: Window | null = null
 let stopRendering: (() => void) | null = null
 
@@ -21,6 +23,8 @@ function createButton(label: string, className: string, action: () => void): HTM
 function renderWidget() {
   if (!floatingWindow || floatingWindow.closed) return
   const doc = floatingWindow.document
+  doc.documentElement.lang = locale.value
+  doc.documentElement.dir = direction.value
   const root = doc.createElement('main')
   root.className = 'pip-widget'
 
@@ -28,7 +32,7 @@ function renderWidget() {
   header.className = 'pip-header'
   const label = doc.createElement('div')
   label.className = 'eyebrow'
-  label.textContent = store.combo ? 'COMBO LIVE' : store.activeTask ? 'ON AIR' : 'CHAPAR · IDLE'
+  label.textContent = store.combo ? t('combo.live') : store.activeTask ? t('status.onAir') : t('pip.idle')
   const timer = doc.createElement('div')
   timer.className = `timer ${store.combo ? 'text-combo' : store.activeTask ? 'text-live' : ''}`
   timer.textContent = formatDuration(store.combo ? store.comboElapsed : store.activeElapsed)
@@ -56,17 +60,17 @@ function renderWidget() {
   if (!recentTasks.length) {
     const empty = doc.createElement('p')
     empty.className = 'pip-empty'
-    empty.textContent = 'Create a task in the main window first.'
+    empty.textContent = t('pip.empty')
     list.append(empty)
   }
   root.append(list)
-  root.append(createButton('Pause', 'button button--ghost pip-pause', () => store.pause()))
+  root.append(createButton(t('actions.pause'), 'button button--ghost pip-pause', () => store.pause()))
   doc.body.replaceChildren(root)
 }
 
 async function openWidget() {
   if (!window.documentPictureInPicture) {
-    showToast('Floating window is not supported here', 'neutral')
+    showToast(t('toast.floatUnsupported'), 'neutral')
     return
   }
   if (floatingWindow && !floatingWindow.closed) {
@@ -80,16 +84,16 @@ async function openWidget() {
       floatingWindow.document.head.append(node.cloneNode(true))
     }
     floatingWindow.document.documentElement.className = document.documentElement.className
-    floatingWindow.document.title = 'Chapar controls'
+    floatingWindow.document.title = t('pip.title')
     stopRendering = watchEffect(renderWidget)
     floatingWindow.addEventListener('pagehide', () => {
       stopRendering?.()
       stopRendering = null
       floatingWindow = null
     }, { once: true })
-    showToast('Floating controls opened', 'live')
+    showToast(t('toast.floatOpened'), 'live')
   } catch {
-    showToast('Could not open floating controls', 'neutral')
+    showToast(t('toast.floatFailed'), 'neutral')
   }
 }
 </script>
@@ -97,6 +101,6 @@ async function openWidget() {
 <template>
   <button class="button button--ghost" type="button" @click="openWidget">
     <svg class="button-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5m0-5-7 7M5 8v11h11v-5" /></svg>
-    Float
+    {{ t('actions.float') }}
   </button>
 </template>

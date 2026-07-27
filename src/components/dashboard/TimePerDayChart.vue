@@ -3,13 +3,15 @@ import type { ChartData, ChartOptions } from 'chart.js'
 import { computed } from 'vue'
 import { Line } from 'vue-chartjs'
 import { useTrackerStore } from '../../stores/tracker'
-import { gridColor, tickColor } from './chartSetup'
+import { useI18n } from '../../composables/useI18n'
+import { chartFontFamily, gridColor, tickColor } from './chartSetup'
 
 const store = useTrackerStore()
+const { locale, t } = useI18n()
 const data = computed<ChartData<'line'>>(() => ({
   labels: store.timePerDay.map((item) => item.label),
   datasets: [{
-    label: 'Hours',
+    label: t('dashboard.hours'),
     data: store.timePerDay.map((item) => Number((item.seconds / 3600).toFixed(2))),
     borderColor: '#35e6a4',
     backgroundColor: 'rgba(53, 230, 164, 0.12)',
@@ -19,15 +21,15 @@ const data = computed<ChartData<'line'>>(() => ({
     fill: true,
   }],
 }))
-const options: ChartOptions<'line'> = {
+const options = computed<ChartOptions<'line'>>(() => ({
   responsive: true,
   maintainAspectRatio: false,
   plugins: { legend: { display: false } },
   scales: {
-    x: { grid: { display: false }, ticks: { color: tickColor, maxRotation: 0, autoSkip: true } },
-    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+    x: { grid: { display: false }, ticks: { color: tickColor, maxRotation: 0, autoSkip: true, font: { family: chartFontFamily(locale.value) } } },
+    y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor, font: { family: chartFontFamily(locale.value) } } },
   },
-}
+}))
 </script>
 
 <template><div class="chart-frame h-60"><Line :data="data" :options="options" /></div></template>
