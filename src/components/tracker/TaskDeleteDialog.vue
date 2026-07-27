@@ -26,8 +26,7 @@ const { direction, t } = useI18n()
     <DialogPortal>
       <DialogOverlay class="dialog-overlay" />
       <DialogContent class="dialog-content" :dir="direction" @click.stop>
-        <div class="eyebrow text-rose-400">{{ t('delete.eyebrow') }}</div>
-        <DialogTitle class="mt-3 text-lg font-semibold text-white">{{ t('delete.title', { name: taskName }) }}</DialogTitle>
+        <DialogTitle class="text-lg font-semibold text-white">{{ t('delete.title', { name: taskName }) }}</DialogTitle>
         <DialogDescription class="mt-2 text-sm leading-6 text-slate-400">
           {{ t('delete.description') }}
         </DialogDescription>
