@@ -39,7 +39,7 @@ const activeViewLabel = computed(() => {
 
 <template>
   <TabsRoot v-model="activeView" class="mx-auto block w-full max-w-3xl" :dir="direction">
-    <header class="app-header mb-5 px-1">
+    <header class="app-header mb-3 px-1">
       <div>
         <div class="eyebrow brand-name">
           <span class="brand-mark" aria-hidden="true"><img :src="chaparIcon" alt="" /></span>

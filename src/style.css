@@ -103,8 +103,8 @@ html[lang="fa"] .brand-name {
 .brand-mark {
   position: relative;
   display: inline-block;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   flex: none;
   overflow: hidden;
 }
@@ -215,7 +215,7 @@ html[lang="fa"] :is(.settings-menu__label, .settings-menu__item, .view-select-it
   position: sticky;
   top: 0;
   z-index: 20;
-  padding: 8px 0 10px;
+  padding: 0 0 10px;
   background: linear-gradient(var(--bg) 72%, transparent);
 }
 .capture-wrap {
