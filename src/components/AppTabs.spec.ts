@@ -14,9 +14,16 @@ describe('AppTabs direction', () => {
       global: {
         stubs: {
           TabsRoot: {
-            props: ['dir'],
+            props: ['dir', 'modelValue'],
             template: '<div class="tabs-root" :dir="dir"><slot /></div>',
           },
+          DropdownMenuRoot: {
+            props: ['dir'],
+            template: '<div class="settings-root" :dir="dir"><slot /></div>',
+          },
+          DropdownMenuTrigger: { template: '<div><slot /></div>' },
+          SelectRoot: { template: '<div><slot /></div>' },
+          SelectTrigger: { template: '<div><slot /></div>' },
         },
       },
     })
@@ -25,7 +32,14 @@ describe('AppTabs direction', () => {
     await nextTick()
 
     expect(wrapper.get('.tabs-root').attributes('dir')).toBe('rtl')
+    expect(wrapper.get('.settings-root').attributes('dir')).toBe('rtl')
     expect(wrapper.get('.brand-mark img').attributes('src')).toContain('icon.png')
+    expect(wrapper.get('.settings-trigger').attributes('aria-label')).toBe('باز کردن تنظیمات')
+    expect(wrapper.get('.view-select-trigger').attributes('aria-label')).toBe('نمای برنامه')
+    expect(wrapper.get('.view-select-trigger').text()).toContain('پیگیری')
+    const viewTrigger = wrapper.get('.view-select-trigger').element
+    const settingsTrigger = wrapper.get('.settings-trigger').element
+    expect(viewTrigger.compareDocumentPosition(settingsTrigger) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
     wrapper.unmount()
   })
 })
