@@ -1,9 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#070b12" />
+    <script>
+      const savedTheme = localStorage.getItem('chapar:theme')?.replaceAll('"', '')
+      const initialTheme = savedTheme === 'light' ? 'light' : 'dark'
+      document.documentElement.dataset.theme = initialTheme
+      document.documentElement.style.colorScheme = initialTheme
+      document.querySelector('meta[name="theme-color"]').content = initialTheme === 'light' ? '#f3f6fa' : '#070b12'
+    </script>
     <title>Chapar — task & time tracker</title>
   </head>
   <body>

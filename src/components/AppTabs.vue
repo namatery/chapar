@@ -24,8 +24,10 @@ import Dashboard from './dashboard/Dashboard.vue'
 import EventLog from './tracker/EventLog.vue'
 import TrackerView from './tracker/TrackerView.vue'
 import { useI18n } from '../composables/useI18n'
+import { useTheme } from '../composables/useTheme'
 
 const { direction, t, toggleLocale } = useI18n()
+const { theme, toggleTheme } = useTheme()
 type AppView = 'tracker' | 'events' | 'dashboard'
 const activeView = ref<AppView>('tracker')
 const activeViewLabel = computed(() => {
@@ -86,6 +88,12 @@ const activeViewLabel = computed(() => {
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h10M9 3v2c0 4-2 7-5 9m3-5c1 2 3 4 6 5m2-5h2l3 10m-4-3h5" /></svg>
                 <span class="flex-1">{{ t('settings.language') }}</span>
                 <span class="settings-menu__value">{{ t('language.button') }}</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem class="settings-menu__item" @select="toggleTheme">
+                <svg v-if="theme === 'dark'" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.6 5.6 7 7m10 10 1.4 1.4M18.4 5.6 17 7M7 17l-1.4 1.4M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" /></svg>
+                <svg v-else viewBox="0 0 24 24" aria-hidden="true"><path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z" /></svg>
+                <span class="flex-1">{{ t('settings.appearance') }}</span>
+                <span class="settings-menu__value">{{ t(theme === 'dark' ? 'theme.light' : 'theme.dark') }}</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenuPortal>
